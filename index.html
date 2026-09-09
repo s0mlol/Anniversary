@@ -5,33 +5,23 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        content="width=device-width, initial-scale=1.0"
     >
 
     <title>Your Anniversary</title>
 
     <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-        }
-
-        html,
-        body {
-            width: 100%;
-            min-height: 100%;
+            box-sizing: border-box;
         }
 
         body {
             min-height: 100vh;
-            min-height: 100dvh;
-
             display: flex;
-            justify-content: center;
             align-items: center;
-
-            padding: 12px;
+            justify-content: center;
 
             font-family:
                 -apple-system,
@@ -44,43 +34,53 @@
 
             background: #f5f5f5;
             color: #171717;
+            padding: 20px;
 
             overflow-x: hidden;
         }
 
-        /* MAIN CARD */
-
         .card {
             width: 100%;
-            max-width: 500px;
+            max-width: 560px;
 
-            padding: 40px 20px;
-
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
 
             border: 1px solid #e5e5e5;
-            border-radius: 22px;
+            border-radius: 24px;
+
+            padding: 50px 40px;
 
             text-align: center;
 
             box-shadow:
-                0 15px 45px rgba(0, 0, 0, 0.06);
+                0 20px 60px rgba(0, 0, 0, 0.06);
+
+            animation: appear 0.5s ease;
         }
 
-        /* HEART */
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
         .heart {
-            font-size: 42px;
-            color: #e63946;
-
+            font-size: 40px;
             margin-bottom: 18px;
+
+            color: #e63946;
 
             animation: heartbeat 2s infinite;
         }
 
         @keyframes heartbeat {
-            0%,
-            100% {
+            0%, 100% {
                 transform: scale(1);
             }
 
@@ -89,10 +89,8 @@
             }
         }
 
-        /* TITLE */
-
         h1 {
-            font-size: 28px;
+            font-size: 30px;
             font-weight: 600;
 
             letter-spacing: -0.5px;
@@ -100,70 +98,72 @@
             margin-bottom: 10px;
         }
 
-        /* SUBTITLE */
-
         .subtitle {
             color: #777;
 
             font-size: 15px;
-            line-height: 1.55;
+            line-height: 1.6;
 
-            margin: 0 auto 30px;
-
-            max-width: 330px;
+            margin-bottom: 35px;
         }
 
-        /* SETUP */
-
         .setup {
-            width: 100%;
+            display: block;
         }
 
         .setup.hidden {
             display: none;
         }
 
-        /*
-            MOBILE DATE INPUT
-
-            Important:
-            The width is controlled by the parent.
-            iPhone's native date input sometimes
-            tries to use its own intrinsic width.
-        */
-
-        .date-wrapper {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
+        /* DATE INPUT */
 
         .date-input {
             display: block;
 
-            width: 100%;
-            max-width: 100%;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
 
-            height: 54px;
+            height: 52px;
 
-            padding: 0 14px;
+            padding: 15px 16px;
 
             border: 1px solid #dcdcdc;
             border-radius: 12px;
 
             background: #fafafa;
 
-            color: #171717;
-
             font-family: inherit;
             font-size: 16px;
+            color: #171717;
 
             outline: none;
+
+            margin: 0;
+
+            box-sizing: border-box !important;
 
             -webkit-appearance: none;
             appearance: none;
 
-            text-align: left;
+            overflow: hidden;
+
+            /*
+             * CENTER THE DATE TEXT
+             */
+            text-align: center;
+
+            transition:
+                background 0.2s,
+                border-color 0.2s,
+                box-shadow 0.2s;
+        }
+
+        /*
+         * iPhone / Safari date text
+         */
+        .date-input::-webkit-date-and-time-value {
+            text-align: center;
         }
 
         .date-input:focus {
@@ -175,24 +175,14 @@
                 0 0 0 3px rgba(0, 0, 0, 0.04);
         }
 
-        /*
-            This makes the date picker text
-            stay inside the input on iPhone.
-        */
-
-        .date-input::-webkit-date-and-time-value {
-            text-align: left;
-        }
-
         /* BUTTON */
 
         button {
-            display: block;
-
             width: 100%;
-            height: 54px;
 
             margin-top: 14px;
+
+            padding: 15px;
 
             border: none;
             border-radius: 12px;
@@ -201,23 +191,30 @@
             color: white;
 
             font-family: inherit;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 500;
 
             cursor: pointer;
 
-            -webkit-tap-highlight-color: transparent;
+            transition:
+                transform 0.2s,
+                opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.88;
+
+            transform: translateY(-1px);
         }
 
         button:active {
-            opacity: 0.8;
+            transform: translateY(0);
         }
 
         /* COUNTDOWN */
 
         .countdown {
             display: none;
-            width: 100%;
         }
 
         .countdown.show {
@@ -233,7 +230,8 @@
         }
 
         .days {
-            font-size: 70px;
+            font-size: 76px;
+
             line-height: 1;
 
             font-weight: 700;
@@ -244,47 +242,42 @@
         }
 
         .days-text {
-            color: #777;
-
             font-size: 15px;
+
+            color: #777;
 
             margin-bottom: 28px;
         }
 
-        /* TIMER */
-
         .timer {
-            width: 100%;
-
             display: grid;
 
             grid-template-columns:
-                repeat(3, minmax(0, 1fr));
+                repeat(3, 1fr);
 
-            gap: 7px;
+            gap: 10px;
 
-            margin-bottom: 25px;
+            margin-bottom: 28px;
         }
 
         .time-box {
-            min-width: 0;
-
-            padding: 13px 4px;
-
             background: #f7f7f7;
 
             border-radius: 12px;
+
+            padding: 14px 8px;
         }
 
         .time-number {
-            font-size: 20px;
+            font-size: 21px;
+
             font-weight: 600;
         }
 
         .time-label {
             color: #888;
 
-            font-size: 10px;
+            font-size: 11px;
 
             margin-top: 3px;
         }
@@ -294,10 +287,8 @@
 
             font-size: 13px;
 
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
-
-        /* CHANGE BUTTON */
 
         .change-button {
             background: transparent;
@@ -309,7 +300,9 @@
             margin-top: 0;
         }
 
-        .change-button:active {
+        .change-button:hover {
+            color: #171717;
+
             background: #fafafa;
         }
 
@@ -317,7 +310,6 @@
 
         .anniversary {
             display: none;
-            width: 100%;
         }
 
         .anniversary.show {
@@ -331,13 +323,13 @@
 
             color: #e63946;
 
-            margin-bottom: 18px;
+            margin-bottom: 20px;
 
             animation: heartbeat 1.5s infinite;
         }
 
         .anniversary h2 {
-            font-size: 28px;
+            font-size: 32px;
 
             font-weight: 600;
 
@@ -347,7 +339,7 @@
         }
 
         .years {
-            font-size: 58px;
+            font-size: 60px;
 
             font-weight: 700;
 
@@ -376,43 +368,24 @@
             font-size: 13px;
         }
 
-        /* ANIMATION */
+        /* MOBILE */
 
-        @keyframes appear {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* SMALL PHONES */
-
-        @media (max-width: 380px) {
-
-            body {
-                padding: 8px;
-            }
+        @media (max-width: 500px) {
 
             .card {
-                padding: 32px 16px;
+                padding: 40px 25px;
+
                 border-radius: 20px;
+
+                overflow: hidden;
             }
 
             h1 {
-                font-size: 25px;
-            }
-
-            .subtitle {
-                font-size: 14px;
+                font-size: 26px;
             }
 
             .days {
-                font-size: 58px;
+                font-size: 62px;
             }
 
             .years {
@@ -420,7 +393,38 @@
             }
 
             .anniversary h2 {
-                font-size: 25px;
+                font-size: 27px;
+            }
+
+            .timer {
+                gap: 7px;
+            }
+
+            .time-box {
+                padding: 12px 5px;
+            }
+
+            /*
+             * DATE BOX
+             */
+
+            .date-input {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 0 !important;
+
+                height: 52px;
+
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+
+                box-sizing: border-box !important;
+
+                text-align: center;
+            }
+
+            .date-input::-webkit-date-and-time-value {
+                text-align: center;
             }
         }
     </style>
@@ -443,16 +447,12 @@
                 and we'll keep track of their special day.
             </p>
 
-            <div class="date-wrapper">
-
-                <input
-                    type="date"
-                    id="weddingDate"
-                    class="date-input"
-                    aria-label="Wedding date"
-                >
-
-            </div>
+            <input
+                type="date"
+                id="weddingDate"
+                class="date-input"
+                aria-label="Wedding date"
+            >
 
             <button
                 type="button"
@@ -505,7 +505,6 @@
 
                 </div>
 
-
                 <div class="time-box">
 
                     <div
@@ -520,7 +519,6 @@
                     </div>
 
                 </div>
-
 
                 <div class="time-box">
 
@@ -616,19 +614,25 @@
         let countdownInterval = null;
 
 
-        /* LOAD SAVED DATE */
+        /*
+         * LOAD SAVED DATE
+         */
 
         if (weddingDate) {
             startCountdown();
         }
 
 
-        /* SAVE DATE */
+        /*
+         * SAVE DATE
+         */
 
         function saveDate() {
 
             const input =
-                document.getElementById("weddingDate");
+                document.getElementById(
+                    "weddingDate"
+                );
 
             if (!input.value) {
 
@@ -639,7 +643,8 @@
                 return;
             }
 
-            weddingDate = input.value;
+            weddingDate =
+                input.value;
 
             localStorage.setItem(
                 "weddingDate",
@@ -650,7 +655,9 @@
         }
 
 
-        /* CHANGE DATE */
+        /*
+         * CHANGE DATE
+         */
 
         function changeDate() {
 
@@ -687,7 +694,9 @@
         }
 
 
-        /* START COUNTDOWN */
+        /*
+         * START COUNTDOWN
+         */
 
         function startCountdown() {
 
@@ -712,7 +721,9 @@
         }
 
 
-        /* UPDATE COUNTDOWN */
+        /*
+         * UPDATE COUNTDOWN
+         */
 
         function updateCountdown() {
 
@@ -728,62 +739,84 @@
             }
 
             const marriageYear =
-                parseInt(parts[0], 10);
+                parseInt(
+                    parts[0],
+                    10
+                );
 
             const marriageMonth =
-                parseInt(parts[1], 10) - 1;
+                parseInt(
+                    parts[1],
+                    10
+                ) - 1;
 
             const marriageDay =
-                parseInt(parts[2], 10);
+                parseInt(
+                    parts[2],
+                    10
+                );
 
-            const now = new Date();
+            const now =
+                new Date();
 
             let anniversary =
                 new Date(
                     now.getFullYear(),
                     marriageMonth,
-                    marriageDay,
-                    0,
-                    0,
-                    0
+                    marriageDay
                 );
 
 
-            /* CHECK TODAY */
+            /*
+             * CHECK IF TODAY
+             */
 
             const isToday =
-                now.getMonth() === marriageMonth &&
-                now.getDate() === marriageDay;
+                now.getMonth() ===
+                    marriageMonth &&
+                now.getDate() ===
+                    marriageDay;
 
 
-            /* CALCULATE YEARS */
+            /*
+             * CALCULATE YEARS
+             */
 
             let years =
                 now.getFullYear() -
                 marriageYear;
 
             if (
-                now.getMonth() < marriageMonth ||
+                now.getMonth() <
+                    marriageMonth ||
                 (
-                    now.getMonth() === marriageMonth &&
-                    now.getDate() < marriageDay
+                    now.getMonth() ===
+                        marriageMonth &&
+                    now.getDate() <
+                        marriageDay
                 )
             ) {
                 years--;
             }
 
 
-            /* ANNIVERSARY TODAY */
+            /*
+             * ANNIVERSARY TODAY
+             */
 
             if (isToday) {
 
-                showAnniversary(years);
+                showAnniversary(
+                    years
+                );
 
                 return;
             }
 
 
-            /* NEXT YEAR */
+            /*
+             * NEXT YEAR
+             */
 
             if (now > anniversary) {
 
@@ -791,15 +824,14 @@
                     new Date(
                         now.getFullYear() + 1,
                         marriageMonth,
-                        marriageDay,
-                        0,
-                        0,
-                        0
+                        marriageDay
                     );
             }
 
 
-            /* DIFFERENCE */
+            /*
+             * DIFFERENCE
+             */
 
             const difference =
                 anniversary.getTime() -
@@ -835,7 +867,9 @@
                 totalSeconds % 60;
 
 
-            /* SHOW COUNTDOWN */
+            /*
+             * SHOW COUNTDOWN
+             */
 
             document
                 .getElementById("anniversary")
@@ -848,7 +882,8 @@
 
             document
                 .getElementById("days")
-                .textContent = days;
+                .textContent =
+                days;
 
 
             document
@@ -872,6 +907,10 @@
                     .padStart(2, "0");
 
 
+            /*
+             * NEXT ANNIVERSARY
+             */
+
             document
                 .getElementById("nextDate")
                 .textContent =
@@ -887,9 +926,13 @@
         }
 
 
-        /* ANNIVERSARY SCREEN */
+        /*
+         * SHOW ANNIVERSARY
+         */
 
-        function showAnniversary(years) {
+        function showAnniversary(
+            years
+        ) {
 
             document
                 .getElementById("countdown")
@@ -902,7 +945,8 @@
 
             document
                 .getElementById("years")
-                .textContent = years;
+                .textContent =
+                years;
 
 
             document
@@ -924,7 +968,9 @@
 
 
             document
-                .getElementById("anniversaryDate")
+                .getElementById(
+                    "anniversaryDate"
+                )
                 .textContent =
                 "Married since " +
                 date.toLocaleDateString(
