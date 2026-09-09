@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
 
     <title>Your Anniversary</title>
 
@@ -13,8 +16,15 @@
             box-sizing: border-box;
         }
 
+        html {
+            width: 100%;
+            min-height: 100%;
+        }
+
         body {
             min-height: 100vh;
+            min-height: 100dvh;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -30,16 +40,23 @@
 
             background: #f5f5f5;
             color: #171717;
+
             padding: 20px;
+
+            overflow-x: hidden;
         }
 
         .card {
             width: 100%;
             max-width: 560px;
+            min-width: 0;
+
             background: rgba(255, 255, 255, 0.95);
             border: 1px solid #e5e5e5;
             border-radius: 24px;
+
             padding: 50px 40px;
+
             text-align: center;
 
             box-shadow:
@@ -93,14 +110,28 @@
 
         .setup {
             display: block;
+            width: 100%;
+            min-width: 0;
         }
 
         .setup.hidden {
             display: none;
         }
 
+        /*
+         * DATE INPUT FIX
+         * Prevents iPhone/iPad Safari from making the
+         * date field wider than the card.
+         */
         .date-input {
+            display: block;
+
             width: 100%;
+            max-width: 100%;
+            min-width: 0;
+
+            height: 52px;
+
             padding: 15px 16px;
 
             border: 1px solid #dcdcdc;
@@ -108,11 +139,25 @@
 
             background: #fafafa;
 
+            font-family: inherit;
             font-size: 16px;
             color: #171717;
 
             outline: none;
-            transition: 0.2s;
+
+            margin: 0;
+
+            transition:
+                background 0.2s,
+                border-color 0.2s,
+                box-shadow 0.2s;
+
+            /*
+             * Allows the native date picker to remain available
+             * while fixing the sizing problem.
+             */
+            -webkit-appearance: auto;
+            appearance: auto;
         }
 
         .date-input:focus {
@@ -124,8 +169,14 @@
         }
 
         button {
+            display: block;
+
             width: 100%;
+            max-width: 100%;
+            min-width: 0;
+
             margin-top: 14px;
+
             padding: 15px;
 
             border: none;
@@ -134,6 +185,7 @@
             background: #171717;
             color: white;
 
+            font-family: inherit;
             font-size: 15px;
             font-weight: 500;
 
@@ -155,6 +207,8 @@
 
         .countdown {
             display: none;
+            width: 100%;
+            min-width: 0;
         }
 
         .countdown.show {
@@ -183,14 +237,18 @@
 
         .timer {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 10px;
             margin-bottom: 28px;
+            width: 100%;
         }
 
         .time-box {
+            min-width: 0;
+
             background: #f7f7f7;
             border-radius: 12px;
+
             padding: 14px 8px;
         }
 
@@ -225,6 +283,8 @@
 
         .anniversary {
             display: none;
+            width: 100%;
+            min-width: 0;
         }
 
         .anniversary.show {
@@ -269,14 +329,51 @@
             font-size: 13px;
         }
 
+        /*
+         * MOBILE
+         */
         @media (max-width: 500px) {
+
+            body {
+                padding: 12px;
+                align-items: center;
+            }
+
             .card {
+                width: 100%;
+                max-width: 100%;
+
                 padding: 40px 25px;
+
                 border-radius: 20px;
             }
 
             h1 {
                 font-size: 26px;
+            }
+
+            .subtitle {
+                font-size: 15px;
+            }
+
+            /*
+             * Extra mobile protection for iOS date input.
+             */
+            .date-input {
+                width: 100%;
+                max-width: 100%;
+                min-width: 0;
+
+                margin-left: 0;
+                margin-right: 0;
+
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            button {
+                width: 100%;
+                max-width: 100%;
             }
 
             .days {
@@ -297,6 +394,48 @@
 
             .time-box {
                 padding: 12px 5px;
+            }
+        }
+
+        /*
+         * VERY SMALL PHONES
+         */
+        @media (max-width: 360px) {
+
+            body {
+                padding: 8px;
+            }
+
+            .card {
+                padding: 32px 18px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+            .days {
+                font-size: 54px;
+            }
+
+            .years {
+                font-size: 44px;
+            }
+
+            .anniversary h2 {
+                font-size: 24px;
+            }
+
+            .time-number {
+                font-size: 18px;
+            }
+
+            .time-label {
+                font-size: 10px;
             }
         }
     </style>
@@ -322,9 +461,10 @@
                 type="date"
                 id="weddingDate"
                 class="date-input"
+                aria-label="Wedding date"
             >
 
-            <button onclick="saveDate()">
+            <button type="button" onclick="saveDate()">
                 Continue
             </button>
 
@@ -385,6 +525,7 @@
             <div class="next-date" id="nextDate"></div>
 
             <button
+                type="button"
                 class="change-button"
                 onclick="changeDate()"
             >
@@ -416,10 +557,13 @@
                 and many more to go.
             </p>
 
-            <div class="anniversary-date" id="anniversaryDate">
-            </div>
+            <div
+                class="anniversary-date"
+                id="anniversaryDate"
+            ></div>
 
             <button
+                type="button"
                 class="change-button"
                 onclick="changeDate()"
             >
@@ -433,12 +577,24 @@
 
     <script>
 
-        let weddingDate = localStorage.getItem("weddingDate");
+        let weddingDate =
+            localStorage.getItem("weddingDate");
 
+        let countdownInterval = null;
+
+
+        /*
+         * START AUTOMATICALLY IF A DATE
+         * WAS ALREADY SAVED.
+         */
         if (weddingDate) {
             startCountdown();
         }
 
+
+        /*
+         * SAVE DATE
+         */
         function saveDate() {
 
             const input =
@@ -449,19 +605,33 @@
                 return;
             }
 
+            weddingDate = input.value;
+
             localStorage.setItem(
                 "weddingDate",
-                input.value
+                weddingDate
             );
-
-            weddingDate = input.value;
 
             startCountdown();
         }
 
+
+        /*
+         * CHANGE DATE
+         */
         function changeDate() {
 
+            /*
+             * Stop the old timer.
+             */
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+
             localStorage.removeItem("weddingDate");
+
+            weddingDate = null;
 
             document
                 .getElementById("countdown")
@@ -480,44 +650,81 @@
                 .value = "";
         }
 
+
+        /*
+         * START COUNTDOWN
+         */
         function startCountdown() {
 
             document
                 .getElementById("setup")
                 .classList.add("hidden");
 
+            /*
+             * Prevent multiple intervals from
+             * running at the same time.
+             */
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+
             updateCountdown();
 
-            setInterval(updateCountdown, 1000);
+            countdownInterval =
+                setInterval(updateCountdown, 1000);
         }
 
+
+        /*
+         * UPDATE COUNTDOWN
+         */
         function updateCountdown() {
 
-            if (!weddingDate) return;
+            if (!weddingDate) {
+                return;
+            }
 
-            const parts = weddingDate.split("-");
+            const parts =
+                weddingDate.split("-");
+
+            if (parts.length !== 3) {
+                return;
+            }
 
             const marriageYear =
-                parseInt(parts[0]);
+                parseInt(parts[0], 10);
 
             const marriageMonth =
-                parseInt(parts[1]) - 1;
+                parseInt(parts[1], 10) - 1;
 
             const marriageDay =
-                parseInt(parts[2]);
+                parseInt(parts[2], 10);
 
             const now = new Date();
 
-            let anniversary = new Date(
-                now.getFullYear(),
-                marriageMonth,
-                marriageDay
-            );
+            /*
+             * Anniversary date for this year.
+             */
+            let anniversary =
+                new Date(
+                    now.getFullYear(),
+                    marriageMonth,
+                    marriageDay,
+                    0,
+                    0,
+                    0
+                );
 
+            /*
+             * Check whether today is the anniversary.
+             */
             const isToday =
                 now.getMonth() === marriageMonth &&
                 now.getDate() === marriageDay;
 
+            /*
+             * Calculate completed years.
+             */
             let years =
                 now.getFullYear() - marriageYear;
 
@@ -531,26 +738,42 @@
                 years--;
             }
 
+            /*
+             * ANNIVERSARY TODAY
+             */
             if (isToday) {
                 showAnniversary(years);
                 return;
             }
 
+            /*
+             * If this year's anniversary has passed,
+             * use next year's anniversary.
+             */
             if (now > anniversary) {
 
-                anniversary = new Date(
-                    now.getFullYear() + 1,
-                    marriageMonth,
-                    marriageDay
-                );
+                anniversary =
+                    new Date(
+                        now.getFullYear() + 1,
+                        marriageMonth,
+                        marriageDay,
+                        0,
+                        0,
+                        0
+                    );
             }
 
+            /*
+             * Calculate remaining time.
+             */
             const difference =
-                anniversary - now;
+                anniversary.getTime() -
+                now.getTime();
 
             const totalSeconds =
-                Math.floor(
-                    difference / 1000
+                Math.max(
+                    0,
+                    Math.floor(difference / 1000)
                 );
 
             const days =
@@ -571,6 +794,10 @@
             const seconds =
                 totalSeconds % 60;
 
+
+            /*
+             * SHOW COUNTDOWN
+             */
             document
                 .getElementById("anniversary")
                 .classList.remove("show");
@@ -579,25 +806,33 @@
                 .getElementById("countdown")
                 .classList.add("show");
 
+
             document
                 .getElementById("days")
                 .textContent = days;
+
 
             document
                 .getElementById("hours")
                 .textContent =
                 String(hours).padStart(2, "0");
 
+
             document
                 .getElementById("minutes")
                 .textContent =
                 String(minutes).padStart(2, "0");
+
 
             document
                 .getElementById("seconds")
                 .textContent =
                 String(seconds).padStart(2, "0");
 
+
+            /*
+             * NEXT ANNIVERSARY DATE
+             */
             document
                 .getElementById("nextDate")
                 .textContent =
@@ -612,6 +847,10 @@
                 );
         }
 
+
+        /*
+         * SHOW ANNIVERSARY SCREEN
+         */
         function showAnniversary(years) {
 
             document
@@ -622,18 +861,26 @@
                 .getElementById("anniversary")
                 .classList.add("show");
 
+
             document
                 .getElementById("years")
                 .textContent = years;
+
 
             document
                 .getElementById("yearsText")
                 .textContent =
                 years +
-                (years === 1 ? " year" : " years");
+                (years === 1
+                    ? " year"
+                    : " years");
+
 
             const date =
-                new Date(weddingDate + "T00:00:00");
+                new Date(
+                    weddingDate + "T00:00:00"
+                );
+
 
             document
                 .getElementById("anniversaryDate")
